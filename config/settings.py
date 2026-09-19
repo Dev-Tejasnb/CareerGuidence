@@ -24,7 +24,7 @@ DEBUG = os.environ.get("DJANGO_DEBUG", "True").lower() in ("1", "true", "yes")
 
 ALLOWED_HOSTS = os.environ.get(
     "DJANGO_ALLOWED_HOSTS",
-    "localhost,127.0.0.1,testserver,192.168.1.3",
+    "localhost,127.0.0.1,testserver,192.168.1.3,careerguidence-8rhj.onrender.com",
 ).split(",")
 
 
