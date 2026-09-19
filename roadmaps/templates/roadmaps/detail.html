@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}{{ roadmap.career.title }} Roadmap | Career Readiness Navigator{% endblock %}
+
+{% block content %}
+<div class="detail-header">
+    <div>
+        <h1>{{ roadmap.career.title }} Roadmap</h1>
+        <p class="lead">Your personalized plan to close skill gaps and reach readiness.</p>
+    </div>
+    <div class="score-badge">
+        <span class="score-num">{{ roadmap.readiness_score }}%</span>
+        <span class="score-label">Starting Readiness</span>
+    </div>
+</div>
+
+<div class="card">
+    <div class="progress-head">
+        <span>Roadmap Progress</span>
+        <span>{{ roadmap.progress_percentage }}%</span>
+    </div>
+    <div class="bar bar-lg">
+        <div class="bar-fill" style="width: {{ roadmap.progress_percentage }}%"></div>
+    </div>
+</div>
+
+<section class="card">
+    <h2>Steps ({{ roadmap.steps.count }})</h2>
+    <ol class="step-list">
+        {% for step in roadmap.steps.all %}
+            <li class="step {{ step.status }}">
+                <div class="step-body">
+                    <strong>{{ step.title }}</strong>
+                    <p>{{ step.description }}</p>
+                </div>
+                <form method="post" action="{% url 'roadmaps:update_step' roadmap.id step.id %}" class="step-actions">
+                    {% csrf_token %}
+                    <select name="status">
+                        {% for value, label in step.STATUS_CHOICES %}
+                            <option value="{{ value }}" {% if step.status == value %}selected{% endif %}>
+                                {{ label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                </form>
+            </li>
+        {% empty %}
+            <p>No steps yet.</p>
+        {% endfor %}
+    </ol>
+</section>
+{% endblock %}

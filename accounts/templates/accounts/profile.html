@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Profile | Career Readiness Navigator{% endblock %}
+
+{% block content %}
+<h1>Profile</h1>
+<div class="profile-grid">
+    <div class="card">
+        <h3>{{ user.display_name|default:user.username }}</h3>
+        <p><strong>Username:</strong> {{ user.username }}</p>
+        <p><strong>Email:</strong> {{ user.email|default:"—" }}</p>
+        <p><strong>Education:</strong> {{ user.education_level|default:"—" }}</p>
+        <p><strong>Bio:</strong> {{ user.bio|default:"—" }}</p>
+    </div>
+    <div class="card">
+        <h3>Quick actions</h3>
+        <a class="btn btn-primary" href="{% url 'skills:assessment' %}">Retake Assessment</a>
+        <a class="btn btn-outline" href="{% url 'dashboard' %}">Go to Dashboard</a>
+    </div>
+</div>
+{% endblock %}

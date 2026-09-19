@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}{{ career.title }} | Career Readiness Navigator{% endblock %}
+
+{% block content %}
+<div class="detail-header">
+    <div>
+        <h1>{{ career.title }}</h1>
+        <p class="lead">{{ career.description }}</p>
+        {% if career.salary_range or career.demand_level %}
+            <div class="career-meta">
+                {% if career.salary_range %}<span>💰 {{ career.salary_range }}</span>{% endif %}
+                {% if career.demand_level %}<span>📈 {{ career.demand_level }}</span>{% endif %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="score-badge">
+        <span class="score-num">{{ analysis.score }}%</span>
+        <span class="score-label">Ready</span>
+    </div>
+</div>
+
+<div class="card">
+    <div class="progress-head">
+        <span>Overall Readiness</span>
+        <span>{{ analysis.score }}%</span>
+    </div>
+    <div class="bar bar-lg">
+        <div class="bar-fill" style="width: {{ analysis.score }}%"></div>
+    </div>
+</div>
+
+<section class="card">
+    <h2>Skill Gap Analysis</h2>
+    {% if analysis.gaps %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Skill</th>
+                    <th>Your Level</th>
+                    <th>Target</th>
+                    <th>Importance</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for gap in analysis.gaps %}
+                    <tr>
+                        <td>
+                            <strong>{{ gap.skill.name }}</strong>
+                            <small class="muted">{{ gap.skill.description }}</small>
+                        </td>
+                        <td>{{ gap.current }}/5</td>
+                        <td>{{ gap.target }}/5</td>
+                        <td>{{ gap.importance }}/5</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No gaps! You're already proficient in all required skills. 🎉</p>
+    {% endif %}
+</section>
+
+<div class="form-actions">
+    {% if roadmap %}
+        <a class="btn btn-primary" href="{% url 'roadmaps:detail' roadmap.id %}">View My Roadmap</a>
+    {% else %}
+        <form method="post" action="{% url 'roadmaps:create' career.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary btn-lg">Generate My Roadmap</button>
+        </form>
+    {% endif %}
+    <a class="btn btn-outline" href="{% url 'careers:list' %}">Back to Careers</a>
+</div>
+{% endblock %}

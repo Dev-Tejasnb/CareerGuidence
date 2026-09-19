@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Career Readiness Navigator{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <header class="site-header">
+        <nav class="navbar container">
+            <a class="brand" href="{% url 'home' %}">Career<span>Navigator</span></a>
+            <div class="nav-links">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'careers:dashboard' %}">Dashboard</a>
+                    <a href="{% url 'skills:assessment' %}">Assess</a>
+                    <a href="{% url 'careers:list' %}">Careers</a>
+                    <a href="{% url 'accounts:profile' %}">{{ user.display_name|default:user.username }}</a>
+                    <form method="post" action="{% url 'accounts:logout' %}" class="inline-form">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-link">Logout</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'accounts:login' %}">Login</a>
+                    <a href="{% url 'accounts:register' %}" class="btn btn-primary">Get Started</a>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
+    <main class="container main">
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>Career Readiness Navigator &mdash; Hackathon MVP</p>
+        </div>
+    </footer>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

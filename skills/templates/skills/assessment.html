@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Skill Assessment | Career Readiness Navigator{% endblock %}
+
+{% block content %}
+<h1>Skill Assessment</h1>
+<p class="lead">Rate your current proficiency for each skill (1 = beginner, 5 = expert).</p>
+
+<form method="post" novalidate>
+    {% csrf_token %}
+    {% for category_name, category_skills in grouped.items %}
+        <div class="card">
+            <h3>{{ category_name|capfirst }} Skills</h3>
+            {% for skill in category_skills %}
+                <div class="skill-row">
+                    <div class="skill-info">
+                        <strong>{{ skill.name }}</strong>
+                        <small>{{ skill.description }}</small>
+                    </div>
+                    <div class="rating-group">
+                        {% for value in "12345" %}
+                            <label class="rating-pill">
+                                <input type="radio" name="skill_{{ skill.id }}"
+                                       value="{{ value }}"
+                                       {% if existing|default:0 == value %}checked{% endif %}>
+                                <span>{{ value }}</span>
+                            </label>
+                        {% endfor %}
+                        <span class="rating-value" data-skill="{{ skill.id }}">—</span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary btn-lg">Save &amp; View Careers</button>
+    </div>
+</form>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Show the selected rating label live for each skill.
+    document.querySelectorAll('.rating-group').forEach(function (group) {
+        const valueEl = group.querySelector('.rating-value');
+        group.querySelectorAll('input').forEach(function (input) {
+            input.addEventListener('change', function () {
+                valueEl.textContent = this.value + '/5';
+            });
+        });
+        const checked = group.querySelector('input:checked');
+        if (checked) valueEl.textContent = checked.value + '/5';
+    });
+</script>
+{% endblock %}

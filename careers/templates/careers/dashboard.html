@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | Career Readiness Navigator{% endblock %}
+
+{% block content %}
+<h1>Dashboard</h1>
+
+{% if not has_assessment %}
+    <div class="alert alert-warning">
+        You haven't completed a skill assessment yet.
+        <a href="{% url 'skills:assessment' %}">Take the assessment</a> to get started.
+    </div>
+{% endif %}
+
+<section class="overview-grid">
+    <div class="stat-card">
+        <span class="stat-label">Best Match</span>
+        <span class="stat-value">{{ best_career.title|default:"—" }}</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-label">Top Readiness</span>
+        <span class="stat-value">{{ best_score }}%</span>
+    </div>
+    <div class="stat-card">
+        <span class="stat-label">Active Roadmaps</span>
+        <span class="stat-value">{{ roadmaps.count }}</span>
+    </div>
+</section>
+
+<section class="card">
+    <h2>Top Careers for You</h2>
+    <div class="career-bars">
+        {% for career, score in careers %}
+            <div class="career-bar">
+                <a href="{% url 'careers:detail' career.pk %}">{{ career.title }}</a>
+                <div class="bar">
+                    <div class="bar-fill" style="width: {{ score }}%"></div>
+                </div>
+                <span class="bar-label">{{ score }}%</span>
+            </div>
+        {% empty %}
+            <p>No careers available yet.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="card">
+    <h2>Your Roadmaps</h2>
+    {% if roadmaps %}
+        <div class="roadmap-list">
+            {% for roadmap in roadmaps %}
+                <a class="roadmap-item" href="{% url 'roadmaps:detail' roadmap.id %}">
+                    <span class="roadmap-title">{{ roadmap.career.title }}</span>
+                    <div class="mini-progress">
+                        <div class="bar">
+                            <div class="bar-fill" style="width: {{ roadmap.progress_percentage }}%"></div>
+                        </div>
+                        <span>{{ roadmap.progress_percentage }}%</span>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No roadmaps yet. <a href="{% url 'careers:list' %}">Explore careers</a> to start one.</p>
+    {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome | Career Readiness Navigator{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Find your direction. Close your skill gaps. Get hired.</h1>
+    <p>
+        Assess your skills, discover careers that fit you, and follow a
+        personalized roadmap to readiness.
+    </p>
+    <div class="hero-actions">
+        <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-lg">Get Started</a>
+        <a href="{% url 'accounts:login' %}" class="btn btn-outline btn-lg">I have an account</a>
+    </div>
+</section>
+
+<section class="features">
+    <div class="feature-card">
+        <span class="feature-icon">1</span>
+        <h3>Skill Assessment</h3>
+        <p>Rate your proficiency across technical and soft skills in minutes.</p>
+    </div>
+    <div class="feature-card">
+        <span class="feature-icon">2</span>
+        <h3>Career Matching</h3>
+        <p>See how ready you are for a range of in-demand careers.</p>
+    </div>
+    <div class="feature-card">
+        <span class="feature-icon">3</span>
+        <h3>Personal Roadmap</h3>
+        <p>Get a step-by-step plan to close your gaps and track progress.</p>
+    </div>
+</section>
+{% endblock %}

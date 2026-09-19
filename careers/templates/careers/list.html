@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Careers | Career Readiness Navigator{% endblock %}
+
+{% block content %}
+<h1>Explore Careers</h1>
+<p class="lead">Ranked by your current readiness based on your assessment.</p>
+
+<div class="career-grid">
+    {% for item in careers %}
+        <a class="career-card" href="{% url 'careers:detail' item.career.pk %}">
+            <div class="career-card-top">
+                <h3>{{ item.career.title }}</h3>
+                <span class="score-pill">{{ item.score }}%</span>
+            </div>
+            <p>{{ item.career.description|truncatechars:120 }}</p>
+            <div class="bar">
+                <div class="bar-fill" style="width: {{ item.score }}%"></div>
+            </div>
+            <div class="career-meta">
+                <span>{{ item.gap_count }} skill gaps</span>
+                {% if item.career.salary_range %}<span>{{ item.career.salary_range }}</span>{% endif %}
+            </div>
+        </a>
+    {% empty %}
+        <p>No careers available yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

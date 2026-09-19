@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Register | Career Readiness Navigator{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+    <div class="auth-card">
+        <h2>Create your account</h2>
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% for error in field.errors %}
+                        <small class="error">{{ error }}</small>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+        </form>
+        <p class="auth-alt">Already have an account? <a href="{% url 'accounts:login' %}">Login</a></p>
+    </div>
+</div>
+{% endblock %}
