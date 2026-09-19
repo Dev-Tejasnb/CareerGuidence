@@ -27,6 +27,11 @@ ALLOWED_HOSTS = os.environ.get(
     "localhost,127.0.0.1,testserver,192.168.1.3,careerguidence-8rhj.onrender.com",
 ).split(",")
 
+CSRF_TRUSTED_ORIGINS = os.environ.get(
+    "DJANGO_CSRF_TRUSTED_ORIGINS",
+    "https://careerguidence-8rhj.onrender.com",
+).split(",")
+
 
 # Application definition
 
